@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16.3-bullseye
+    environment:
+      POSTGRES_DB: db-oauth-gateway
+      POSTGRES_USER: lyzhia
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5435:5432"  # external port mapped to internal postgres port
+    volumes:
+      - db_order_vol:/var/lib/postgresql/data
+    networks:
+      - microservices-net
+
+  product-service:
+    image: product-service
+    build:
+      dockerfile: Dockerfile
+      context: ../Product  # changed to forward slash
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      #- SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/db-oauth-gateway
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  order-service:
+    image: order-service
+    build:
+      dockerfile: Dockerfile
+      context: ../order-service  # changed to forward slash
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      #SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db-order-service
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - postgres
+    networks:
+      - microservices-net
+    command: ["java", "-jar", "app.jar", "--debug"]
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  db_order_vol:

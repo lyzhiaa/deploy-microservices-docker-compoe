@@ -1,0 +1,36 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: order-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/db-order-service
+    username: lyzhia
+    password: 123456
+    #JPA config
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#          format_sql: true
+#          show_sql: true
+logging:
+  level:
+    org.springframework.core.env: DEBUG
+# Profile-specific configuration
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/db-order-service
+    username: lyzhia
+    password: 123456
+
+
+
