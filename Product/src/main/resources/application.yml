@@ -1,21 +1,28 @@
 server:
   port: 8081
 spring:
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://vault:1680
+      name: product_service
+      profile: default
   application:
     name: product_service
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5435/db-oauth-gateway
-    username: lyzhia
-    password: 123456
-  # JPA config
+    username: ${postgres_username}  # Reference Vault key for username
+    password: ${postgres_password}   # Reference Vault key for password
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
 management:
   endpoints:
     web:
@@ -27,14 +34,20 @@ management:
       export:
         enabled: true
 
+
 ---
 spring:
   config:
     activate:
       on-profile: docker
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://config-server:1680
+      name: product_service
+      profile: default
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres:5432/db-oauth-gateway  # Corrected the JDBC URL format
-    username: lyzhia
-    password: 123456
-
+    url: jdbc:postgresql://postgres:5432/db-oauth-gateway
+    username: ${postgres_username}
+    password: ${postgres_password}

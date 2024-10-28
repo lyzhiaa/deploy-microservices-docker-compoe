@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: category
+  cloud:
+    vault:
+      uri: http://localhost:8200

@@ -1,0 +1,51 @@
+#server:
+#  port: 1680
+#spring:
+#  application:
+#    name: config-server
+#  main:
+#    allow-bean-definition-overriding: true
+#  profiles:
+#    active: vault
+#  cloud:
+#    config:
+#      server:
+#        vault:
+#          host: localhost
+#          port: 8200
+#          scheme: http
+#          authentication: token
+#          token: myroot
+#          kv-version: 2
+#          backend: secret
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 1680
+spring:
+  application:
+    name: config-server
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: vault
+  cloud:
+    config:
+      server:
+        vault:
+          host: vault
+          port: 8200
+          scheme: http
+          authentication: token
+          token: myroot
+          kv-version: 2
+          backend: secret
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka/
+
+
