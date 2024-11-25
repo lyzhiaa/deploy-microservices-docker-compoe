@@ -155,6 +155,7 @@ services:
       - "5435:5432"  # external port mapped to internal postgres port
     volumes:
       - db_order_vol:/var/lib/postgresql/data
+      - db_category_vol:/var/lib/postgresql/data
     networks:
       - microservices-net
 

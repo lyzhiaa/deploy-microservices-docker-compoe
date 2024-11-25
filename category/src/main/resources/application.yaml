@@ -1,6 +1,35 @@
+server:
+  port: 8083
 spring:
   application:
-    name: category
-  cloud:
-    vault:
-      uri: http://localhost:8200
+    name: category_service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/db-category
+    username: lyzhia
+    password: 123456
+    # JPA config
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      #      defaultZone: http://service-registry:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+

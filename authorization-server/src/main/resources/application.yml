@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: authorization-server
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:9000
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/db-oauth2
+    username: lyzhia
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+      show_sql: true
+
+logging:
+  level:
+    org.springframework.security: trace
+server:
+  port: 9000
